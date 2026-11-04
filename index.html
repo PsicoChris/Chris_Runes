@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PoC para extraer y voltear runas del Futhark antiguo.">
+  <title>Oráculo de Runas</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <p class="eyebrow">FUTHARK ANTIGUO · 24 RUNAS</p>
+      <h1>Oráculo de Runas</h1>
+      <p class="subtitle">Extrae tus runas y descubre cuáles han salido.</p>
+    </header>
+
+    <section class="controls" aria-label="Controles de extracción">
+      <label for="draw-count">¿Cuántas runas quieres extraer?</label>
+      <div class="control-row">
+        <select id="draw-count">
+          <option value="1">1 runa</option>
+          <option value="3" selected>3 runas</option>
+          <option value="5">5 runas</option>
+          <option value="24">Las 24 runas</option>
+        </select>
+        <button id="draw-button" class="button button-primary">Extraer runas</button>
+        <button id="reset-button" class="button button-secondary">Reiniciar</button>
+      </div>
+      <p id="status" class="status" aria-live="polite">El conjunto está completo. ¡Puedes empezar!</p>
+    </section>
+
+    <section class="table-area">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">TU TIRADA</p>
+          <h2>Runas extraídas</h2>
+        </div>
+        <span id="remaining" class="remaining">24 disponibles</span>
+      </div>
+
+      <div id="rune-board" class="rune-board">
+        <div class="empty-state">
+          <span class="empty-symbol">ᚱ</span>
+          <p>Tus runas aparecerán aquí.</p>
+          <small>Cuando aparezcan, haz clic sobre cada una para voltearla.</small>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ</span>
+      <p>Una herramienta de exploración simbólica basada en el Futhark antiguo. la interpretación es a </p>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,170 @@
+:root {
+  --bg: #111310;
+  --panel: #1b1e19;
+  --panel-soft: #23271f;
+  --text: #eee9dc;
+  --muted: #a7a18f;
+  --gold: #c5a66b;
+  --gold-light: #e5cf9f;
+  --border: #3b3d32;
+  --blue: #168cb0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(197,166,107,.10), transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+button, select { font: inherit; }
+
+.app {
+  width: min(1100px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 54px 0 30px;
+}
+
+.header { text-align: center; margin-bottom: 38px; }
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--gold);
+  font: 700 .7rem/1.4 Arial, sans-serif;
+  letter-spacing: .22em;
+}
+h1 {
+  margin: 0;
+  color: var(--gold-light);
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: .025em;
+}
+.subtitle { margin: 12px 0 0; color: var(--muted); font-size: 1.05rem; }
+
+.controls, .table-area {
+  border: 1px solid var(--border);
+  background: rgba(27,30,25,.92);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+}
+.controls { margin-bottom: 22px; }
+.controls label { display: block; margin-bottom: 12px; color: var(--gold-light); }
+.control-row { display: flex; flex-wrap: wrap; gap: 10px; }
+select, .button {
+  min-height: 44px;
+  border-radius: 7px;
+  padding: 0 16px;
+}
+select {
+  min-width: 150px;
+  color: var(--text);
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+}
+.button {
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.button:hover { transform: translateY(-1px); }
+.button:focus-visible, select:focus-visible, .rune-card:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+}
+.button-primary { background: var(--gold); color: #171711; font-weight: 700; }
+.button-primary:hover { background: var(--gold-light); }
+.button-secondary { background: transparent; border-color: var(--border); color: var(--text); }
+.button-secondary:hover { border-color: var(--gold); }
+.status { min-height: 1.2em; margin: 13px 0 0; color: var(--muted); font: .85rem Arial, sans-serif; }
+
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.section-heading .eyebrow { margin-bottom: 5px; }
+h2 { margin: 0; font-size: 1.65rem; font-weight: 400; }
+.remaining { color: var(--muted); font: .8rem Arial, sans-serif; }
+
+.rune-board {
+  min-height: 270px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding: 22px 8px;
+}
+.empty-state { text-align: center; color: var(--muted); }
+.empty-symbol { display: block; color: var(--gold); font-size: 3.5rem; margin-bottom: 8px; }
+.empty-state p { margin: 0 0 6px; color: var(--text); }
+.empty-state small { font: .82rem Arial, sans-serif; }
+
+.rune-slot { width: 132px; text-align: center; }
+.rune-card {
+  width: 112px;
+  height: 166px;
+  margin: 0 auto 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  perspective: 900px;
+  cursor: pointer;
+}
+.card-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .65s cubic-bezier(.2,.7,.2,1);
+}
+.rune-card.is-flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-back {
+  color: var(--gold);
+  background:
+    linear-gradient(135deg, transparent 46%, rgba(197,166,107,.12) 47%, rgba(197,166,107,.12) 53%, transparent 54%),
+    #090a08;
+  font-size: 3rem;
+}
+.card-front {
+  transform: rotateY(180deg);
+  flex-direction: column;
+  gap: 8px;
+  color: #f4e9ce;
+  background: #153a42;
+}
+.rune-glyph { font-size: 4.7rem; line-height: 1; }
+.rune-card.is-inverted .rune-glyph { transform: rotate(180deg); }
+.card-name { color: var(--gold-light); font: 700 .78rem Arial, sans-serif; letter-spacing: .08em; }
+.position { color: var(--muted); font: .82rem Arial, sans-serif; }
+.flip-hint { color: var(--muted); font: .72rem Arial, sans-serif; }
+
+.footer { padding: 28px 0 0; text-align: center; color: var(--muted); }
+.footer span { color: var(--gold); letter-spacing: .35em; font-size: 1.2rem; }
+.footer p { font: .75rem/1.5 Arial, sans-serif; }
+
+@media (max-width: 560px) {
+  .app { width: min(100% - 22px, 1100px); padding-top: 34px; }
+  .controls, .table-area { padding: 17px; }
+  .control-row > * { flex: 1 1 100%; }
+  .section-heading { align-items: start; flex-direction: column; }
+  .rune-board { gap: 18px 8px; }
+  .rune-slot { width: 108px; }
+  .rune-card { width: 94px; height: 145px; }
+  .rune-glyph { font-size: 4rem; }
+}
