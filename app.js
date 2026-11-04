@@ -100,14 +100,7 @@ function renderRunes(runes) {
     name.className = "card-name";
     name.textContent = rune.name;
 
-    // Nuevo elemento para mostrar el significado dentro de la carta
-    const meaning = document.createElement("span");
-    meaning.className = "card-meaning";
-    meaning.textContent = rune.meaning;
-
-    // Añadimos el glifo, el nombre y el significado al frente de la tarjeta
-    front.append(glyph, name, meaning);
-
+    front.append(glyph, name);
     inner.append(back, front);
     card.append(inner);
 
@@ -119,14 +112,42 @@ function renderRunes(runes) {
     hint.className = "flip-hint";
     hint.textContent = "Clic para voltear";
 
+  
+    const tooltip = document.createElement("div");
+    tooltip.className = "rune-tooltip";
+    
+    const tooltipTitle = document.createElement("span");
+    tooltipTitle.className = "rune-tooltip-title";
+    tooltipTitle.textContent = rune.name.toUpperCase();
+    
+    const tooltipDesc = document.createElement("p");
+    tooltipDesc.className = "rune-tooltip-desc";
+    tooltipDesc.textContent = rune.meaning;
+    
+    tooltip.append(tooltipTitle, tooltipDesc);
+
+    let hoverTimer = null;
+
+    // Al poner el mouse encima, esperamos 2 segundos (2000 ms)
+    slot.addEventListener("mouseenter", () => {
+      hoverTimer = setTimeout(() => {
+        tooltip.classList.add("is-visible");
+      }, 2000);
+    });
+
+    // Si el usuario quita el mouse antes o después, limpiamos y ocultamos
+    slot.addEventListener("mouseleave", () => {
+      clearTimeout(hoverTimer);
+      tooltip.classList.remove("is-visible");
+    });
+
     card.addEventListener("click", () => {
       const flipped = card.classList.toggle("is-flipped");
       card.setAttribute("aria-pressed", String(flipped));
-
       hint.textContent = flipped ? "Clic para ocultar" : "Clic para voltear";
     });
 
-    slot.append(card, position, hint);
+    slot.append(card, position, hint, tooltip);
     board.append(slot);
   });
 }
