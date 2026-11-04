@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PoC para extraer y voltear runas del Futhark antiguo.">
+  <meta name="description" content="Oráculo de runas con sistema de arrastre y orientaciones.">
   <title>Oráculo de Runas</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
@@ -13,45 +13,46 @@
     <header class="header">
       <p class="eyebrow">FUTHARK ANTIGUO · 24 RUNAS</p>
       <h1>Oráculo de Runas</h1>
-      <p class="subtitle">Extrae tus runas y descubre cuáles han salido.</p>
+      <p class="subtitle">Arrastra las runas desde la bolsa hacia el tablero de lectura.</p>
     </header>
 
-    <section class="controls" aria-label="Controles de extracción">
-      <label for="draw-count">¿Cuántas runas quieres extraer?</label>
-      <div class="control-row">
-        <select id="draw-count">
-          <option value="1">1 runa</option>
-          <option value="3" selected>3 runas</option>
-          <option value="5">5 runas</option>
-          <option value="24">Las 24 runas</option>
-        </select>
-        <button id="draw-button" class="button button-primary">Extraer runas</button>
-        <button id="reset-button" class="button button-secondary">Reiniciar</button>
+    <section class="controls" aria-label="Bolsa de runas">
+      <div class="bag-container">
+        <div id="rune-bag" class="rune-bag" aria-label="Bolsa de runas">
+          <span class="bag-icon">💰</span>
+          <div class="bag-info">
+            <span class="bag-title">Saco Ancestral de Runas</span>
+            <span id="remaining" class="remaining">24 disponibles</span>
+          </div>
+        </div>
+        <div class="bag-actions">
+          <p class="bag-instructions">Arrastra una runa de la bolsa al tablero, o haz clic en reiniciar para devolverlas todas.</p>
+          <button id="reset-button" class="button button-secondary">Reiniciar bolsa</button>
+        </div>
       </div>
-      <p id="status" class="status" aria-live="polite">El conjunto está completo. ¡Puedes empezar!</p>
+      <p id="status" class="status" aria-live="polite">La bolsa está lista. ¡Arrastra tu primera runa!</p>
     </section>
 
     <section class="table-area">
       <div class="section-heading">
         <div>
           <p class="eyebrow">TU TIRADA</p>
-          <h2>Runas extraídas</h2>
+          <h2>Tablero de Lectura</h2>
         </div>
-        <span id="remaining" class="remaining">24 disponibles</span>
       </div>
 
-      <div id="rune-board" class="rune-board">
+      <div id="rune-board" class="rune-board drop-zone">
         <div class="empty-state">
           <span class="empty-symbol">ᚱ</span>
           <p>Tus runas aparecerán aquí.</p>
-          <small>Cuando aparezcan, haz clic sobre cada una para voltearla.</small>
+          <small>Arrastra las runas desde la bolsa y suéltalas en este espacio.</small>
         </div>
       </div>
     </section>
 
     <footer class="footer">
       <span>ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ</span>
-      <p>Una herramienta de exploración simbólica basada en el Futhark antiguo. la interpretación es a </p>
+      <p>Una herramienta de exploración simbólica.</p>
     </footer>
   </main>
 </body>
