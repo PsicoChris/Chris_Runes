@@ -13,10 +13,23 @@
     <header class="header">
       <p class="eyebrow">FUTHARK ANTIGUO · 24 RUNAS</p>
       <h1>Oráculo de Runas</h1>
-      <p class="subtitle">Arrastra las runas desde la bolsa hacia el tablero de lectura.</p>
+      <p class="subtitle">Selecciona cuántas runas deseas tirar, arrastra o toca la bolsa y descubre tu lectura.</p>
     </header>
 
     <section class="controls" aria-label="Bolsa de runas">
+      <!-- Selector de cantidad de runas -->
+      <div class="control-row" style="margin-bottom: 20px;">
+        <div>
+          <label for="rune-limit-select"><strong>Tipo de Tirada (Cantidad de Runas):</strong></label>
+          <select id="rune-limit-select">
+            <option value="1">1 Runa (Consejo Rápido)</option>
+            <option value="3" selected>3 Runas (Pasado, Presente, Futuro)</option>
+            <option value="5">5 Runas (Cruz del Destino)</option>
+            <option value="9">9 Runas (Los 9 Mundos)</option>
+          </select>
+        </div>
+      </div>
+
       <div class="bag-container">
         <div id="rune-bag" class="rune-bag" aria-label="Bolsa de runas">
           <span class="bag-icon">💰</span>
@@ -26,11 +39,11 @@
           </div>
         </div>
         <div class="bag-actions">
-          <p class="bag-instructions">Arrastra una runa de la bolsa al tablero, o haz clic en reiniciar para devolverlas todas.</p>
+          <p class="bag-instructions">Toca o arrastra una runa de la bolsa al tablero. Usa reiniciar para comenzar de nuevo.</p>
           <button id="reset-button" class="button button-secondary">Reiniciar bolsa</button>
         </div>
       </div>
-      <p id="status" class="status" aria-live="polite">La bolsa está lista. ¡Arrastra tu primera runa!</p>
+      <p id="status" class="status" aria-live="polite">La bolsa está lista. ¡Extrae tu primera runa!</p>
     </section>
 
     <section class="table-area">
@@ -39,20 +52,28 @@
           <p class="eyebrow">TU TIRADA</p>
           <h2>Tablero de Lectura</h2>
         </div>
+        <!-- Botón para generar la interpretación -->
+        <button id="interpret-button" class="button button-primary">Revelar Interpretación</button>
       </div>
 
       <div id="rune-board" class="rune-board drop-zone">
         <div class="empty-state">
           <span class="empty-symbol">ᚱ</span>
           <p>Tus runas aparecerán aquí.</p>
-          <small>Arrastra las runas desde la bolsa y suéltalas en este espacio.</small>
+          <small>Arrastra o toca la bolsa para extraer las runas.</small>
         </div>
       </div>
+
+      <!-- Contenedor donde aparecerá la lectura dinámica -->
+      <div id="interpretation-container"></div>
     </section>
 
     <footer class="footer">
-      <span>ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ</span>
-      <p>Una herramienta de exploración simbólica.</p>
+      <div class="footer-container">
+        <span>ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ</span>
+        <p>&copy; 2026 By Chris "La Makina". Todos los derechos reservados.</p>
+        <p class="footer-sub">Una herramienta de exploración simbólica.</p>
+      </div>
     </footer>
   </main>
 </body>

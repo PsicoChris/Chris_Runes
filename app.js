@@ -30,9 +30,16 @@ const resetButton = document.querySelector("#reset-button");
 const board = document.querySelector("#rune-board");
 const status = document.querySelector("#status");
 const remaining = document.querySelector("#remaining");
+const limitSelect = document.querySelector("#rune-limit-select");
+const interpretButton = document.querySelector("#interpret-button");
+const interpretationContainer = document.querySelector("#interpretation-container");
 
 let availableRunes = [...RUNES];
 let drawnRunesList = [];
+
+function getMaxLimit() {
+  return parseInt(limitSelect.value, 10);
+}
 
 function shuffle(array) {
   const result = [...array];
@@ -45,7 +52,8 @@ function shuffle(array) {
 
 function updateRemaining() {
   remaining.textContent = `${availableRunes.length} disponibles`;
-  if (availableRunes.length === 0) {
+  const maxLimit = getMaxLimit();
+  if (availableRunes.length === 0 || drawnRunesList.length >= maxLimit) {
     runeBag.style.opacity = "0.5";
     runeBag.style.cursor = "not-allowed";
   } else {
@@ -54,11 +62,17 @@ function updateRemaining() {
   }
 }
 
-// Configurar Arrastre desde la bolsa
+// Si cambia el selector de cantidad, reiniciamos la bolsa
+limitSelect.addEventListener("change", () => {
+  resetBag();
+});
+
+// Configurar Arrastre desde la bolsa (Escritorio)
 runeBag.setAttribute("draggable", "true");
 
 runeBag.addEventListener("dragstart", (e) => {
-  if (availableRunes.length === 0) {
+  const maxLimit = getMaxLimit();
+  if (availableRunes.length === 0 || drawnRunesList.length >= maxLimit) {
     e.preventDefault();
     return;
   }
@@ -82,6 +96,20 @@ board.addEventListener("dragleave", () => {
 board.addEventListener("drop", (e) => {
   e.preventDefault();
   board.classList.remove("drag-over");
+  intentarExtraerRuna();
+});
+
+// Clic / Toque en bolsa (Celulares)
+runeBag.addEventListener("click", () => {
+  intentarExtraerRuna();
+});
+
+function intentarExtraerRuna() {
+  const maxLimit = getMaxLimit();
+  if (drawnRunesList.length >= maxLimit) {
+    status.textContent = `Has completado tu tirada de ${maxLimit} runas. Reinicia o cambia el tipo de tirada.`;
+    return;
+  }
 
   if (availableRunes.length === 0) {
     status.textContent = "No quedan más runas en la bolsa. Reinicia el conjunto.";
@@ -89,17 +117,17 @@ board.addEventListener("drop", (e) => {
   }
 
   drawSingleRune();
-});
+}
 
 function drawSingleRune() {
-  // Sacamos una runa aleatoria de la bolsa
+  const maxLimit = getMaxLimit();
+  if (drawnRunesList.length >= maxLimit) return;
+
   const shuffled = shuffle(availableRunes);
   const rune = shuffled[0];
 
-  // La removemos de disponibles
   availableRunes = availableRunes.filter(r => r.name !== rune.name);
 
-  // Decidir aleatoriamente si sale invertida (50% de probabilidad)
   const isInverted = Math.random() < 0.5;
 
   const runeData = {
@@ -110,17 +138,24 @@ function drawSingleRune() {
   drawnRunesList.push(runeData);
   renderBoard();
 
-  status.textContent = `Has extraído una runa arrastrándola de la bolsa. (${availableRunes.length} restantes)`;
+  if (drawnRunesList.length === maxLimit) {
+    status.textContent = `¡Tirada de ${maxLimit} runas completada! Haz clic en "Revelar Interpretación".`;
+  } else {
+    status.textContent = `Has extraído la runa ${drawnRunesList.length} de ${maxLimit}. (${availableRunes.length} restantes)`;
+  }
+  
   updateRemaining();
 }
 
 function renderBoard() {
+  interpretationContainer.innerHTML = ""; // Limpiar interpretación si se modifica la tirada
+
   if (drawnRunesList.length === 0) {
     board.innerHTML = `
       <div class="empty-state">
         <span class="empty-symbol">ᚱ</span>
         <p>Tus runas aparecerán aquí.</p>
-        <small>Arrastra las runas desde la bolsa y suéltalas en este espacio.</small>
+        <small>Arrastra o toca la bolsa para extraer las runas.</small>
       </div>
     `;
     return;
@@ -163,13 +198,12 @@ function renderBoard() {
 
     const position = document.createElement("div");
     position.className = "position";
-    position.textContent = `Runa ${index + 1}`;
+    position.textContent = `Posición ${index + 1}`;
 
     const hint = document.createElement("div");
     hint.className = "flip-hint";
     hint.textContent = "Clic para voltear";
 
-    // --- BURBUJA FLOTANTE (Con soporte para significado invertido) ---
     const tooltip = document.createElement("div");
     tooltip.className = "rune-tooltip";
     
@@ -207,11 +241,40 @@ function renderBoard() {
   });
 }
 
+// Generación dinámica de la interpretación para cualquier cantidad de runas
+interpretButton.addEventListener("click", () => {
+  const maxLimit = getMaxLimit();
+  if (drawnRunesList.length < maxLimit) {
+    status.textContent = `Primero debes completar las ${maxLimit} runas de tu tirada.`;
+    return;
+  }
+
+  let htmlParrafos = "";
+  drawnRunesList.forEach((rune, index) => {
+    const text = rune.inverted ? rune.meaningInv : rune.meaning;
+    const name = rune.inverted ? `${rune.name} (Invertida)` : rune.name;
+    htmlParrafos += `<li><strong>Posición ${index + 1} (${name}):</strong> <em>${text}</em></li>`;
+  });
+
+  interpretationContainer.innerHTML = `
+    <div class="interpretation-box">
+      <h3 style="color: var(--gold-light); margin-top: 0; font-size: 1.3rem;">📜 Lectura Global del Oráculo (${maxLimit} Runas)</h3>
+      <p>Al entrelazar las energías de tu tirada, el oráculo revela lo siguiente:</p>
+      <ul style="line-height: 1.6; padding-left: 20px;">
+        ${htmlParrafos}
+      </ul>
+    </div>
+  `;
+
+  status.textContent = "¡Interpretación generada con éxito!";
+});
+
 function resetBag() {
   availableRunes = [...RUNES];
   drawnRunesList = [];
+  interpretationContainer.innerHTML = "";
   renderBoard();
-  status.textContent = "Bolsa reiniciada. Las 24 runas están disponibles de nuevo.";
+  status.textContent = `Bolsa reiniciada. Listo para tu tirada de ${getMaxLimit()} runas.`;
   updateRemaining();
 }
 
